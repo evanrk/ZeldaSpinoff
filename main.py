@@ -1,7 +1,7 @@
 import pygame
 
-from map import Map
-import block
+from engine.map import Map
+import engine.tile as tile
 
 BACKGROUND = (150, 150, 150)
 
@@ -26,13 +26,11 @@ map = Map(SCREEN_SIZE, [
 [1, 1, 1, 1, 1, 1, 1, 1]
 ])
 
-print(map)
-
-# run = True
-# while run:
-#     for event in pygame.event.get():
+run = True
+while run:
+    for event in pygame.event.get():
         
         
-#         # quit!
-#         if event.type == pygame.QUIT:
-#             run = False
+        # quit!
+        if event.type == pygame.QUIT:
+            run = False
