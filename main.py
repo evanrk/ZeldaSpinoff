@@ -5,9 +5,10 @@ from engine.map import Map
 from engine.player import Player
 
 BACKGROUND = (150, 150, 150)
+SCREEN_SIZE = (800, 600)
+PLAYER_HITBOX_X, PLAYER_HITBOX_Y = 40, 25
 
 # set dimensions of the screen
-SCREEN_SIZE = (800, 600)
 surface = pygame.display.set_mode(SCREEN_SIZE)
 
 # caption
@@ -69,25 +70,31 @@ pygame.display.update()
 
 
 
-player = Player(100, 100, 40, 20)
+player = Player(SCREEN_SIZE, 100, 100, PLAYER_HITBOX_X, PLAYER_HITBOX_Y)
 render_player(player)
 
 
 run = True
 while run:
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP]:
-        player.move(0, 1)
-    elif keys[pygame.K_DOWN]:
-        player.move(0, -1)
-    elif keys[pygame.K_LEFT]:
-        player.move(-1, 0)
-    elif keys[pygame.K_RIGHT]:
-        player.move(1, 0)
+    if not player.edges_touching():
+        if keys[pygame.K_UP]:
+            player.move(0, 1)
+        elif keys[pygame.K_DOWN]:
+            player.move(0, -1)
+        elif keys[pygame.K_LEFT]:
+            player.move(-1, 0)
+        elif keys[pygame.K_RIGHT]:
+            player.move(1, 0)
+    else:
+        pass # change screen
 
+    print(f"({player.x_start}, {player.y_start})")
     render_map(screen2)
     render_player(player)
     pygame.display.update()
+
+    print(player.edges_touching())
 
     for event in pygame.event.get():
         # quit!
