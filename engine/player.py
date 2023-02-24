@@ -19,12 +19,12 @@ class Player:
 
     def edges_touching(self):
         edges = []
+        if self.y_start == 0:
+            edges.append("UP")
+        if self.y_end == self.screen_size[1]:
+            edges.append("DOWN")
         if self.x_start == 0:
             edges.append("LEFT")
         if self.x_end == self.screen_size[0]:
             edges.append("RIGHT")
-        if self.y_start == 0:
-            edges.append("TOP")
-        if self.y_end == self.screen_size[1]:
-            edges.append("BOTTOM")
         return edges

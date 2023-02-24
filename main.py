@@ -6,7 +6,9 @@ from engine.player import Player
 
 BACKGROUND = (150, 150, 150)
 SCREEN_SIZE = (800, 600)
+SCREEN_INDEX_SIZE = (8, 6)
 PLAYER_HITBOX_X, PLAYER_HITBOX_Y = 40, 25
+START = (1, 1)
 
 # set dimensions of the screen
 surface = pygame.display.set_mode(SCREEN_SIZE)
@@ -22,18 +24,18 @@ pygame.display.flip()
 # 1 = Collidable_Color <-- this too
 
 # x:y = 4:3
-screen1 = Map(SCREEN_SIZE, [
-[1, 0, 0, 1, 1, 0, 0, 1],
-[1, 0, 0, 1, 1, 0, 0, 1],
-[1, 0, 1, 1, 1, 1, 0, 1],
-[1, 0, 1, 1, 1, 1, 0, 1],
-[1, 0, 0, 1, 1, 0, 0, 1],
-[1, 0, 0, 1, 1, 0, 0, 1]
-])
+# screen1 = Map(SCREEN_SIZE, [
+# [1, 0, 0, 1, 1, 0, 0, 1],
+# [1, 0, 0, 1, 1, 0, 0, 1],
+# [1, 0, 1, 1, 1, 1, 0, 1],
+# [1, 0, 1, 1, 1, 1, 0, 1],
+# [1, 0, 0, 1, 1, 0, 0, 1],
+# [1, 0, 0, 1, 1, 0, 0, 1]
+# ])
 
-screen2 = Map(SCREEN_SIZE, [
+tile_map = Map(SCREEN_SIZE, SCREEN_INDEX_SIZE, START, [
 [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-[0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+[0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
 [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
 [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
 [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
@@ -46,14 +48,6 @@ screen2 = Map(SCREEN_SIZE, [
 [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
 ])
 
-START = (1, 2)
-
-screens = [
-[screen1, screen2, screen1],
-[screen2, screen1, screen2],
-[screen1, screen2, screen1],
-]
-
 def render_map(map: Map):
     for row in map:
         for tile in row:
@@ -65,7 +59,7 @@ def render_player(player: Player): # changing
     player_rect = pygame.Rect(player.x_start, player.y_start, player.x_hitbox, player.y_hitbox)
     pygame.draw.rect(surface, (255, 0, 0), player_rect)
 
-render_map(screen2)
+render_map(tile_map)
 pygame.display.update()
 
 
@@ -80,6 +74,7 @@ while run:
     if not player.edges_touching():
         if keys[pygame.K_UP]:
             player.move(0, 1)
+            tile_map.update_screen((0, 0))
         elif keys[pygame.K_DOWN]:
             player.move(0, -1)
         elif keys[pygame.K_LEFT]:
@@ -89,12 +84,12 @@ while run:
     else:
         pass # change screen
 
-    print(f"({player.x_start}, {player.y_start})")
-    render_map(screen2)
+    # print(f"({player.x_start}, {player.y_start})")
+    render_map(tile_map)
     render_player(player)
     pygame.display.update()
 
-    print(player.edges_touching())
+    # print(player.edges_touching())
 
     for event in pygame.event.get():
         # quit!
