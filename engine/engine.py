@@ -1,7 +1,7 @@
 import pygame
 
 from engine.map import Map
-from engine.player import Player
+from engine.movables.player import Player
 from engine.tile import Tile
 
 SCROLLING_SPEED = 5
@@ -28,28 +28,28 @@ class ZeldaEngine:
                     if "UP" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] > 0:
                             self.animate_screen_switch("UP")
-                    elif not (self.tile_map.check_collision(self.player, 0, -1)):
+                    elif not (self.player.check_collision(self.tile_map, 0, -1)):
                         self.player.move(0, -1)
                 
                 elif keys[pygame.K_DOWN]:
                     if "DOWN" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] < len(self.tile_map.screens)-1: # len is 1 greater than last index value
                             self.animate_screen_switch("DOWN")
-                    elif not (self.tile_map.check_collision(self.player, 0, 1)):
+                    elif not (self.player.check_collision(self.tile_map, 0, 1)):
                         self.player.move(0, 1)
 
                 elif keys[pygame.K_LEFT]:    
                     if "LEFT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] > 0:
                             self.animate_screen_switch("LEFT")
-                    elif not (self.tile_map.check_collision(self.player, -1, 0)):
+                    elif not (self.player.check_collision(self.tile_map, -1, 0)):
                         self.player.move(-1, 0)
                 
                 elif keys[pygame.K_RIGHT]:
                     if "RIGHT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] < len(self.tile_map.screens[0])-1: # len is 1 greater than last index value
                             self.animate_screen_switch("RIGHT")
-                    elif not (self.tile_map.check_collision(self.player, 1, 0)):
+                    elif not (self.player.check_collision(self.tile_map, 1, 0)):
                         self.player.move(1, 0)
                     
                     

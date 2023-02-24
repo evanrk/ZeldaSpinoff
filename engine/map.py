@@ -26,48 +26,47 @@ class Map:
         self.prerender = self.render(start_index)
 
 
-    def check_collision(self, moveable, x_move, y_move):
+    def check_collision(self, movable, x_move, y_move):
         if x_move and y_move:
             raise ValueError("woah, you cant move diagonally")
         
         direction = ""
         if x_move == 0: # moving on the y_axis
-            x_start = moveable.x_hitbox_start / self.x_size # scaled to indexes on tile_map
-            x_end = moveable.x_hitbox_end / self.x_size # scaled to indexes on tile_map
+            x_start = movable.x_hitbox_start / self.x_size # scaled to indexes on tile_map
+            x_end = movable.x_hitbox_end / self.x_size # scaled to indexes on tile_map
             x_start_index = int(x_start)
             x_end_index = int(x_end)
 
             if y_move < 0: # up        
-                y = (moveable.y_hitbox_start+y_move) / self.y_size # scaled to indexes on tile_map
+                y = (movable.y_hitbox_start+y_move) / self.y_size # scaled to indexes on tile_map
                 y_index = int(y) - 1 # because the hitbox is on the other side
                 direction = "UP"
         
             elif y_move > 0: # down
-                y = (moveable.y_hitbox_end+y_move) / self.y_size # scaled to indexes on tile_map
+                y = (movable.y_hitbox_end+y_move) / self.y_size # scaled to indexes on tile_map
                 y_index = int(y) 
                 direction = "DOWN"
         
             if y == int(y): # check if on edge of block
                 if not (y_index == -1 or y_index == len(self.prerender)): # make sure the hitbox is not on the edge of the screen
                     if self.prerender[y_index][x_start_index].collidable or self.prerender[y_index][x_end_index].collidable: # check if the block at [y][x] is actually collidable at both x indexes
-                        print(f"({x_start_index}, {y_index})({x_end_index}, {y_index})")
                         return direction
 
             # print(f"{y} == {int(y)} = {y == int(y)}\t{x_end} == {int(x_end)} = {x_end == int(x_end)}")
             
         else: # moving on x_axis
-            y_start = moveable.y_hitbox_start / self.y_size # scaled to indexes on tile_map
-            y_end = moveable.y_hitbox_end / self.y_size  # scaled to indexes on tile_map
+            y_start = movable.y_hitbox_start / self.y_size # scaled to indexes on tile_map
+            y_end = movable.y_hitbox_end / self.y_size  # scaled to indexes on tile_map
             y_start_index = int(y_start)
             y_end_index = int(y_end)
 
             if x_move < 0: # left
-                x = (moveable.x_hitbox_start+x_move) / self.x_size # scaled to indexes on tile_map
+                x = (movable.x_hitbox_start+x_move) / self.x_size # scaled to indexes on tile_map
                 x_index = int(x) - 1 # because the hitbox is on the other side
                 direction = "LEFT"
             
             elif x_move > 0: # right
-                x = (moveable.x_hitbox_end+x_move) / self.x_size # scaled to indexes on tile_map
+                x = (movable.x_hitbox_end+x_move) / self.x_size # scaled to indexes on tile_map
                 x_index = int(x)
                 direction = "RIGHT"
             
