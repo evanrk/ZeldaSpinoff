@@ -4,7 +4,9 @@ from engine.map import Map
 from engine.player import Player
 from engine.tile import Tile
 
-SCROLLING_SPEED = 2
+SCROLLING_SPEED = 5
+OVERWORLD_COLOR = (232, 217, 116)
+DUNGEON_COLOR = (76, 91, 115)
 
 class ZeldaEngine:
     def __init__(self, surface, screen_size, tile_map:Map, player:Player):
@@ -13,14 +15,16 @@ class ZeldaEngine:
         self.player = player
         self.screen_size = screen_size
         self.pause = False
+        self.overworld = True
+
 
     def run(self):
         run = True
         while run:
+            self.fill_background(self.overworld) # CHANGE
             if not self.pause: # runs when not paused
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_UP]:
-                    
                     if "UP" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] > 0:
                             self.animate_screen_switch("UP")
@@ -60,7 +64,7 @@ class ZeldaEngine:
                     run = False
 
 
-    def render_map(self, tile_map, offset=0, direction="x"):
+    def render_map(self, tile_map, offset=0, direction="x", overworld=True):
         for row in tile_map:
             for tile in row:
                 if direction == "x":
@@ -71,11 +75,12 @@ class ZeldaEngine:
                     y_offset = offset
                 else:
                     raise ValueError("not an axis")
+                if tile.color == "clear":
+                    continue
                 # print(f"start: ({tile.x_start}, {tile.y_start}) end: ({tile.x_end}, {tile.y_end})")
                 rectangle = pygame.Rect(tile.x_start+x_offset, tile.y_start+y_offset, tile.x_size, tile.y_size)
                 pygame.draw.rect(self.surface, tile.color, rectangle)
     
-
     def render_player(self): # changing
         player_rect = pygame.Rect(self.player.x_start, self.player.y_start, self.player.x_hitbox, self.player.y_hitbox)
         pygame.draw.rect(self.surface, (255, 0, 0), player_rect)
@@ -115,13 +120,14 @@ class ZeldaEngine:
         
         where_u_r_going = -negative*SCROLLING_SPEED
         for offset in range(max_offset, negative*1, where_u_r_going): # change is 1 or -1 based off of the starting direction
-            offset_for_old = offset-max_offset
-            self.surface.fill((125, 125, 125))
+            self.fill_background(self.overworld)
+            
+            offset_for_old = offset-max_offset # the offset for the old map
             self.render_map(ending_screen, offset=offset, direction=direction) # renders the new map
             self.render_map(self.tile_map, offset=offset_for_old, direction=direction) # renders the old map
 
 
-            print(offset + self.player.x_size)
+            # print(offset + self.player.x_size)            
             if direction == "x" and negative*offset > self.player.x_size: # if the offset is greater then the player size it will move the player, this prevents the player from going off the screen
                 self.player.move(where_u_r_going, 0)
             elif direction == "y" and negative*offset > self.player.y_size: # same here but for y-axis
@@ -131,7 +137,12 @@ class ZeldaEngine:
 
             pygame.display.update()
         
+        
+        self.fill_background(self.overworld)
         self.tile_map.replace_screen((x, y))
 
         self.pause=False
 
+
+    def fill_background(self, overworld):
+        self.surface.fill(OVERWORLD_COLOR if overworld else DUNGEON_COLOR)

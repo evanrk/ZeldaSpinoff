@@ -71,6 +71,8 @@ class Map:
                         prerender_row.append(tile.Color_Tile((100, 100, 255), x_index, row_index, self.x_size, self.y_size))
                     case 1: # collidable
                         prerender_row.append(tile.Collidable_Color_Tile((100, 255, 100), x_index, row_index, self.x_size, self.y_size))
+                    case 2: # Clear 
+                        prerender_row.append(tile.Color_Tile("clear", x_index, row_index, self.x_size, self.y_size))
                     case _:
                         prerender_row.append(tile.Color_Tile((0, 0, 0), x_index, row_index, self.x_size, self.y_size))
             prerender.append(prerender_row)
