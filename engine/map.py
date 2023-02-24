@@ -43,6 +43,7 @@ class Map:
     def __getitem__(self, index):
         return self.prerender[index]
     
+    
     def __str__(self):
         map_string = ""
         for index, row in enumerate(self.tile_map):
@@ -53,8 +54,8 @@ class Map:
 
     def replace_screen(self, coordinates: tuple):
         self.current_screen = self.screens[coordinates[1]][coordinates[0]]
+        self.current_screen_index = coordinates
         self.prerender = self.render(coordinates)
-
         
     
     def render(self, coordinates: tuple):

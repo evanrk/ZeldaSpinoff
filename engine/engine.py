@@ -19,40 +19,34 @@ class ZeldaEngine:
         while run:
             if not self.pause: # runs when not paused
                 keys = pygame.key.get_pressed()
-                if not self.player.edges_touching():
-                    if keys[pygame.K_UP]:
-                        self.player.move(0, 1)
-                    elif keys[pygame.K_DOWN]:
-                        self.player.move(0, -1)
-                    elif keys[pygame.K_LEFT]:
-                        self.player.move(-1, 0)
-                    elif keys[pygame.K_RIGHT]:
-                        self.player.move(1, 0)
-                else:
+                if keys[pygame.K_UP]:
+                    
                     if "UP" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] > 0:
                             self.animate_screen_switch("UP")
-                    elif "DOWN" in self.player.edges_touching():
-                        if self.tile_map.current_screen_index[1] < len(self.tile_map[:]):
+                    else:
+                        self.player.move(0, 1)
+                
+                elif keys[pygame.K_DOWN]:
+                    if "DOWN" in self.player.edges_touching():
+                        if self.tile_map.current_screen_index[1] < len(self.tile_map.screens)-1: # len is 1 greater than last index value
                             self.animate_screen_switch("DOWN")
-                    elif "LEFT" in self.player.edges_touching():
+                    else:
+                        self.player.move(0, -1)
+
+                elif keys[pygame.K_LEFT]:    
+                    if "LEFT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] > 0:
                             self.animate_screen_switch("LEFT")
-                    elif "RIGHT" in self.player.edges_touching():
-                        if self.tile_map.current_screen_index[0] < len(self.tile_map[0]):
+                    else:
+                        self.player.move(-1, 0)
+                
+                elif keys[pygame.K_RIGHT]:
+                    if "RIGHT" in self.player.edges_touching():
+                        if self.tile_map.current_screen_index[0] < len(self.tile_map.screens[0])-1: # len is 1 greater than last index value
                             self.animate_screen_switch("RIGHT")
-                    # if "UP" in self.player.edges_touching():
-                    #     if self.tile_map.current_screen_index[1] != 0:
-                    #         self.tile_map.replace_screen((self.tile_map.current_screen_index[0], self.tile_map.current_screen_index[1]-1)) # move screen up
-                    # elif "DOWN" in self.player.edges_touching():
-                    #     if self.tile_map.current_screen_index[1] + 1 != len(self.tile_map):
-                    #         self.tile_map.replace_screen((self.tile_map.current_screen_index[0], self.tile_map.current_screen_index[1]+1)) # move screen down
-                    # elif "LEFT" in self.player.edges_touching():
-                    #     if self.tile_map.current_screen_index[0] != 0:
-                    #         self.tile_map.replace_screen((self.tile_map.current_screen_index[0]-1, self.tile_map.current_screen_index[1])) # move screen left
-                    # elif "RIGHT" in self.player.edges_touching():
-                    #     if self.tile_map.current_screen_index[0] + 1 == len(self.tile_map[0]):
-                    #         self.tile_map.replace_screen((self.tile_map.current_screen_index[0]+1, self.tile_map.current_screen_index[1])) # move screen right
+                    else:
+                        self.player.move(1, 0)
                     
             # change screen
             # print(f"({player.x_start}, {player.y_start})")
@@ -117,27 +111,27 @@ class ZeldaEngine:
         else:
             raise ValueError("ummm thats not a direction")
         
-        negative = int(max_offset/abs(max_offset))
-        # if max_offset >= 1:
-        for offset in range(max_offset, negative*1, -negative*SCROLLING_SPEED): # change is 1 or -1 based off of the starting direction
+        negative = int(max_offset/abs(max_offset)) # whether the offset adds or subtracts to the max
+        
+        where_u_r_going = -negative*SCROLLING_SPEED
+        for offset in range(max_offset, negative*1, where_u_r_going): # change is 1 or -1 based off of the starting direction
             offset_for_old = offset-max_offset
             self.surface.fill((125, 125, 125))
-            self.render_map(ending_screen, offset=offset, direction=direction)
-            self.render_map(self.tile_map, offset=offset_for_old, direction=direction)
+            self.render_map(ending_screen, offset=offset, direction=direction) # renders the new map
+            self.render_map(self.tile_map, offset=offset_for_old, direction=direction) # renders the old map
+
+
+            print(offset + self.player.x_size)
+            if direction == "x" and negative*offset > self.player.x_size: # if the offset is greater then the player size it will move the player, this prevents the player from going off the screen
+                self.player.move(where_u_r_going, 0)
+            elif direction == "y" and negative*offset > self.player.y_size: # same here but for y-axis
+                self.player.move(0, -where_u_r_going) # position is negative on y-axis
+            
+            self.render_player()
+
             pygame.display.update()
-        # elif max_offset <= -1:
-        #     for offset in range(max_offset, -1, SCROLLING_SPEED): # change is 1 or -1 based off of the starting direction
-        #         offset_for_old = offset-max_offset
-        #         self.surface.fill((125, 125, 125))
-        #         self.render_map(ending_screen, offset=offset, direction=direction)
-        #         self.render_map(self.tile_map, offset=offset_for_old, direction=direction)
-        #         pygame.display.update()
-        # else:
-        #     print("wtf")
         
         self.tile_map.replace_screen((x, y))
 
-        pause=True
+        self.pause=False
 
-        self.tile_map
-        self.screen_size

@@ -1,12 +1,22 @@
 class Player:
-    def __init__(self, SCREEN_SIZE, x_start:float, y_start:float, x_hitbox:float, y_hitbox:float):
+    def __init__(self, SCREEN_SIZE, x_start:float, y_start:float, x_hitbox:float, y_hitbox:float, x_size:float, y_size:float):
+        self.screen_size = SCREEN_SIZE
+        
+        self.x_size = x_size
+        self.y_size = y_size
+        
         self.x_start = x_start
         self.y_start = y_start
+        
+        self.x_end = x_start + x_size
+        self.y_end = y_start + y_size
+        
+        self.x_hitbox_start = self.x_end - x_hitbox
+        self.y_hitbox_start = self.y_end - y_hitbox
+        
         self.x_hitbox = x_hitbox
         self.y_hitbox = y_hitbox
-        self.x_end = x_start + x_hitbox
-        self.y_end = y_start + y_hitbox
-        self.screen_size = SCREEN_SIZE
+        
 
     def __str__(self):
         return f"current_pos: ({self.x_current}, {self.y_current})\nhitbox_x: {self.x_hitbox}\nhitbox_y: {self.y_hitbox}"

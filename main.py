@@ -8,6 +8,7 @@ BACKGROUND = (150, 150, 150)
 SCREEN_SIZE = (800, 600)
 SCREEN_INDEX_SIZE = (8, 6)
 PLAYER_HITBOX_X, PLAYER_HITBOX_Y = 40, 25
+PLAYER_SIZE_X, PLAYER_SIZE_Y = 40, 25
 START = (1, 0)
 
 # set dimensions of the screen
@@ -37,7 +38,8 @@ tile_map = Map(SCREEN_SIZE, SCREEN_INDEX_SIZE, START, [
 [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
 ])
 
-player = Player(SCREEN_SIZE, 100, 100, PLAYER_HITBOX_X, PLAYER_HITBOX_Y)
+player = Player(SCREEN_SIZE, 100, 100, PLAYER_HITBOX_X, PLAYER_HITBOX_Y, PLAYER_SIZE_X, PLAYER_SIZE_Y
+                )
 
 engine = ZeldaEngine(surface, SCREEN_SIZE, tile_map, player)
 engine.run()
