@@ -23,23 +23,7 @@ class Map:
             self.screens.append(mini)
 
         self.current_screen = self.screens[start_index[1]][start_index[0]]
-        self.prerender = [] # a prerender of the current screen
-
-        
-        # prerendering the objects in the map
-        for row_index in range(len(self.current_screen)):
-            prerender_row = []
-            for x_index in range(len(self.current_screen[row_index])):
-                match self.current_screen[row_index][x_index]:
-                    case 0: # Regular 
-                        prerender_row.append(tile.Color_Tile((100, 100, 255), x_index, row_index, self.x_size, self.y_size))
-                    case 1: # collidable
-                        prerender_row.append(tile.Collidable_Color_Tile((100, 255, 100), x_index, row_index, self.x_size, self.y_size))
-                    case _:
-                        prerender_row.append(tile.Color_Tile((0, 0, 0), x_index, row_index, self.x_size, self.y_size))
-
-
-            self.prerender.append(prerender_row)
+        self.prerender = self.render(start_index)
 
 
     def check_collision(self, moveable, x_move, y_move):
@@ -69,19 +53,25 @@ class Map:
 
     def replace_screen(self, coordinates: tuple):
         self.current_screen = self.screens[coordinates[1]][coordinates[0]]
-        self.prerender = []
+        self.prerender = self.render(coordinates)
 
-        # prerendering the objects in the map
-        for row_index in range(len(self.current_screen)):
+        
+    
+    def render(self, coordinates: tuple):
+        new_screen = self.screens[coordinates[1]][coordinates[0]]
+        prerender = []
+
+        # for prerendering the objects in the map
+        for row_index in range(len(new_screen)):
             prerender_row = []
-            for x_index in range(len(self.current_screen[row_index])):
-                match self.current_screen[row_index][x_index]:
+            for x_index in range(len(new_screen[row_index])):
+                match new_screen[row_index][x_index]:
                     case 0: # Regular 
                         prerender_row.append(tile.Color_Tile((100, 100, 255), x_index, row_index, self.x_size, self.y_size))
                     case 1: # collidable
                         prerender_row.append(tile.Collidable_Color_Tile((100, 255, 100), x_index, row_index, self.x_size, self.y_size))
                     case _:
                         prerender_row.append(tile.Color_Tile((0, 0, 0), x_index, row_index, self.x_size, self.y_size))
-
-
-            self.prerender.append(prerender_row)
+            prerender.append(prerender_row)
+        
+        return prerender
