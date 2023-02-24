@@ -6,6 +6,7 @@ class Map:
     def __init__(self, screen_size, screen_size_index, start_index, tile_map):
         self.tile_map = tile_map
         self.screens = []
+        self.current_screen_index = start_index
 
         self.x_size = screen_size[0]/(screen_size_index[0]) # gets the x_size of every block
         self.y_size = screen_size[1]/(screen_size_index[1]) # gets the y_size of every block
@@ -66,7 +67,7 @@ class Map:
         return f"x_size: {self.x_size}\ny_size: {self.y_size}\nmap(reversed):\n{map_string}"
 
 
-    def update_screen(self, coordinates: tuple):
+    def replace_screen(self, coordinates: tuple):
         self.current_screen = self.screens[coordinates[1]][coordinates[0]]
         self.prerender = []
 
