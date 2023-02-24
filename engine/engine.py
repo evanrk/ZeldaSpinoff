@@ -28,32 +28,32 @@ class ZeldaEngine:
                     if "UP" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] > 0:
                             self.animate_screen_switch("UP")
-                    else:
-                        self.player.move(0, 1)
+                    elif not (self.tile_map.check_collision(self.player, 0, -1)):
+                        self.player.move(0, -1)
                 
                 elif keys[pygame.K_DOWN]:
                     if "DOWN" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] < len(self.tile_map.screens)-1: # len is 1 greater than last index value
                             self.animate_screen_switch("DOWN")
-                    else:
-                        self.player.move(0, -1)
+                    elif not (self.tile_map.check_collision(self.player, 0, 1)):
+                        self.player.move(0, 1)
 
                 elif keys[pygame.K_LEFT]:    
                     if "LEFT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] > 0:
                             self.animate_screen_switch("LEFT")
-                    else:
+                    elif not (self.tile_map.check_collision(self.player, -1, 0)):
                         self.player.move(-1, 0)
                 
                 elif keys[pygame.K_RIGHT]:
                     if "RIGHT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] < len(self.tile_map.screens[0])-1: # len is 1 greater than last index value
                             self.animate_screen_switch("RIGHT")
-                    else:
+                    elif not (self.tile_map.check_collision(self.player, 1, 0)):
                         self.player.move(1, 0)
                     
+                    
             # change screen
-            # print(f"({player.x_start}, {player.y_start})")
             self.render_map(self.tile_map)
             self.render_player()
             pygame.display.update()
@@ -131,15 +131,16 @@ class ZeldaEngine:
             if direction == "x" and negative*offset > self.player.x_size: # if the offset is greater then the player size it will move the player, this prevents the player from going off the screen
                 self.player.move(where_u_r_going, 0)
             elif direction == "y" and negative*offset > self.player.y_size: # same here but for y-axis
-                self.player.move(0, -where_u_r_going) # position is negative on y-axis
+                self.player.move(0, where_u_r_going) # position is negative on y-axis
             
             self.render_player()
 
             pygame.display.update()
         
-        
+
         self.fill_background(self.overworld)
         self.tile_map.replace_screen((x, y))
+
 
         self.pause=False
 

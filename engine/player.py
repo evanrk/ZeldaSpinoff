@@ -11,21 +11,33 @@ class Player:
         self.x_end = x_start + x_size
         self.y_end = y_start + y_size
         
-        self.x_hitbox_start = self.x_end - x_hitbox
-        self.y_hitbox_start = self.y_end - y_hitbox
-        
         self.x_hitbox = x_hitbox
         self.y_hitbox = y_hitbox
         
+        self.x_hitbox_start = self.x_end - self.x_hitbox
+        self.y_hitbox_start = self.y_end - self.y_hitbox
+        
+        self.x_hitbox_end = self.x_end
+        self.y_hitbox_end = self.y_end
+        
+        
+
 
     def __str__(self):
         return f"current_pos: ({self.x_current}, {self.y_current})\nhitbox_x: {self.x_hitbox}\nhitbox_y: {self.y_hitbox}"
 
     def move(self, x:float, y:float):
         self.x_start += x
-        self.y_start -= y
+        self.y_start += y
+        
         self.x_end = self.x_start + self.x_hitbox
         self.y_end = self.y_start + self.y_hitbox
+
+        self.x_hitbox_start = self.x_end - self.x_hitbox
+        self.y_hitbox_start = self.y_end - self.y_hitbox
+
+        self.x_hitbox_end = self.x_end
+        self.y_hitbox_end = self.y_end
 
     def edges_touching(self):
         edges = []
