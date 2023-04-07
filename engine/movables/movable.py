@@ -1,15 +1,11 @@
 class Movable:
     def __init__(self, screen_size):
         self.screen_size = screen_size
-    
-
-    def __str__(self):
-        return f"current_pos: ({self.x_current}, {self.y_current})\nhitbox_x: {self.x_hitbox}\nhitbox_y: {self.y_hitbox}"
  
 
 
 class Square_Movable(Movable):
-    def __init__(self, screen_size, x_start:float, y_start:float, x_hitbox:float, y_hitbox:float, x_size:float, y_size:float):
+    def __init__(self, screen_size, x_start:float, y_start:float, x_hitbox:float, y_hitbox:float, x_size:float, y_size:float, ignore_types:list):
         super().__init__(screen_size)
         
         self.x_size = x_size
@@ -30,8 +26,10 @@ class Square_Movable(Movable):
         self.x_hitbox_end = self.x_end
         self.y_hitbox_end = self.y_end
 
+        self.ignore_types = ignore_types
     
     def move(self, x:float, y:float):
+        """moves the object by changing the values"""
         self.x_start += x
         self.y_start += y
         
@@ -46,6 +44,7 @@ class Square_Movable(Movable):
 
 
     def edges_touching(self):
+        """checks if the object is touching an edge of the screen"""
         edges = []
         if self.y_start == 0:
             edges.append("UP")
@@ -57,7 +56,7 @@ class Square_Movable(Movable):
             edges.append("RIGHT")
         return edges
     
-    def check_collision(self, tile_map, x_move, y_move):
+    def check_map_collision(self, tile_map, x_move, y_move):
         if x_move and y_move:
             raise ValueError("woah, you cant move diagonally")
         
@@ -68,7 +67,7 @@ class Square_Movable(Movable):
             x_start_index = int(x_start)
             x_end_index = int(x_end)
 
-            if y_move < 0: # up        
+            if y_move < 0: # up    
                 y = (self.y_hitbox_start+y_move) / tile_map.y_size # scaled to indexes on tile_map
                 y_index = int(y) - 1 # because the hitbox is on the other side
                 direction = "UP"
@@ -105,8 +104,37 @@ class Square_Movable(Movable):
                 if not (x_index == -1 or x_index == len(tile_map.prerender[0])): # make sure the hitbox is not on the edge of the screen
                     if tile_map.prerender[y_start_index][x_index].collidable or tile_map.prerender[y_end_index][x_index].collidable: # check if the block at [y][x] is actually collidable at both y indexes
                         return direction
+    
+    def check_object_collision(self, other_objects, x_move, y_move):
+        """finds all objects touching this one returns a list"""
+        if x_move and y_move:
+            raise ValueError("woah, cant move diagonally")
 
+        touching = []
+        x_start = self.x_hitbox_start+x_move
+        x_end = self.x_hitbox_end+x_move
+        y_start = self.y_hitbox_start+y_move
+        y_end = self.y_hitbox_end+y_move
 
+        for index, object in enumerate(other_objects):
+            if Square_Movable in type(object).__bases__ and not (type(object) in self.ignore_types):
+                other_x_start = object.x_start
+                other_x_end = object.x_end
+                other_y_start = object.y_start
+                other_y_end = object.y_end
+
+                on_same_y_axis = (y_start < other_y_end and y_start > other_y_start) or (y_end > other_y_start and y_start < other_y_start) # in the y range
+                on_same_x_axis = (x_start < other_x_end and x_start > other_x_start) or (x_end > other_x_start and x_start < other_x_start) # in the x range
+                if on_same_x_axis and on_same_y_axis: # in both ranges
+                    touching.append(object)
+            
+            elif Circle_Movable in type(object).__bases__ and not(type(object) in self.ignore_types):
+                other_x_center = object.x_center
+                other_y_center = object.y_center
+                other_radius = object.radius
+                close_to_x_axis = abs(x_start - other_x_center) <= other_radius or abs(x_end - other_x_center) <= other_radius
+        
+        return touching
 
 class Circle_Movable(Movable):
     def __init__(self, screen_size, x_center:float, y_center:float, radius:float ):

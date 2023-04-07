@@ -2,11 +2,12 @@ import pygame
 
 from engine.map import Map
 from engine.movables.player import Player
-from engine.tile import Tile
+from engine.movables.enemy import Enemy
 
 SCROLLING_SPEED = 5
 OVERWORLD_COLOR = (232, 217, 116)
 DUNGEON_COLOR = (76, 91, 115)
+enemy = Enemy((800, 600), 150, 150, 15, 15, 15, 15, [Enemy])
 
 class ZeldaEngine:
     def __init__(self, surface, screen_size, tile_map:Map, player:Player):
@@ -17,6 +18,7 @@ class ZeldaEngine:
         self.pause = False
         self.overworld = True
 
+        self.objects = [enemy]
 
     def run(self):
         run = True
@@ -28,34 +30,40 @@ class ZeldaEngine:
                     if "UP" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] > 0:
                             self.animate_screen_switch("UP")
-                    elif not (self.player.check_collision(self.tile_map, 0, -1)):
-                        self.player.move(0, -1)
+                    elif not (self.player.check_map_collision(self.tile_map, 0, -1)):
+                        if not (self.player.check_object_collision(self.objects, 0, -1)):
+                            self.player.move(0, -1)
                 
                 elif keys[pygame.K_DOWN]:
                     if "DOWN" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] < len(self.tile_map.screens)-1: # len is 1 greater than last index value
                             self.animate_screen_switch("DOWN")
-                    elif not (self.player.check_collision(self.tile_map, 0, 1)):
-                        self.player.move(0, 1)
+                    elif not (self.player.check_map_collision(self.tile_map, 0, 1)):
+                        if not (self.player.check_object_collision(self.objects, 0, 1)):
+                            self.player.move(0, 1)
 
                 elif keys[pygame.K_LEFT]:    
                     if "LEFT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] > 0:
                             self.animate_screen_switch("LEFT")
-                    elif not (self.player.check_collision(self.tile_map, -1, 0)):
-                        self.player.move(-1, 0)
+                    elif not (self.player.check_map_collision(self.tile_map, -1, 0)):
+                        if not (self.player.check_object_collision(self.objects, -1, 0)):
+                            self.player.move(-1, 0)
                 
                 elif keys[pygame.K_RIGHT]:
                     if "RIGHT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] < len(self.tile_map.screens[0])-1: # len is 1 greater than last index value
                             self.animate_screen_switch("RIGHT")
-                    elif not (self.player.check_collision(self.tile_map, 1, 0)):
-                        self.player.move(1, 0)
+                    elif not (self.player.check_map_collision(self.tile_map, 1, 0)):
+                        if not (self.player.check_object_collision(self.objects, 1, 0)):
+                            self.player.move(1, 0)
                     
-                    
+
             # change screen
             self.render_map(self.tile_map)
             self.render_player()
+            for enemy in self.objects:
+                self.render_enemy(enemy)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -85,6 +93,9 @@ class ZeldaEngine:
         player_rect = pygame.Rect(self.player.x_start, self.player.y_start, self.player.x_hitbox, self.player.y_hitbox)
         pygame.draw.rect(self.surface, (255, 0, 0), player_rect)
 
+    def render_enemy(self, enemy):
+        enemy_rect = pygame.Rect(enemy.x_start, enemy.y_start, enemy.x_hitbox, enemy.y_hitbox)
+        pygame.draw.rect(self.surface, (255, 255, 0), enemy_rect)
     
     def animate_screen_switch(self, starting_direction):
         self.pause = True
