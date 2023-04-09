@@ -40,9 +40,12 @@ tile_map = Map(SCREEN_SIZE, SCREEN_INDEX_SIZE, START, [
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ])
 
-player = Player(SCREEN_SIZE, 100, 200, PLAYER_HITBOX_X, PLAYER_HITBOX_Y, PLAYER_SIZE_X, PLAYER_SIZE_Y, [Player])
+player = Player(SCREEN_SIZE, 100, 200, PLAYER_HITBOX_X, PLAYER_HITBOX_Y, PLAYER_SIZE_X, PLAYER_SIZE_Y, [Player], 60)
 
 # enemy = Enemy(SCREEN_SIZE, 100, 100, PLAYER_HITBOX_X, PLAYER_HITBOX_Y, PLAYER_SIZE_X, PLAYER_SIZE_Y, [Player])
 
 engine = ZeldaEngine(surface, SCREEN_SIZE, tile_map, player)
 engine.run()
+
+
+# fix enemy collision with player

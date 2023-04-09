@@ -27,6 +27,7 @@ class Square_Movable(Movable):
         self.y_hitbox_end = self.y_end
 
         self.ignore_types = ignore_types
+
     
     def move(self, x:float, y:float):
         """moves the object by changing the values"""
@@ -104,7 +105,8 @@ class Square_Movable(Movable):
                 if not (x_index == -1 or x_index == len(tile_map.prerender[0])): # make sure the hitbox is not on the edge of the screen
                     if tile_map.prerender[y_start_index][x_index].collidable or tile_map.prerender[y_end_index][x_index].collidable: # check if the block at [y][x] is actually collidable at both y indexes
                         return direction
-    
+
+
     def check_object_collision(self, other_objects, x_move, y_move):
         """finds all objects touching this one returns a list"""
         if x_move and y_move:
@@ -116,7 +118,7 @@ class Square_Movable(Movable):
         y_start = self.y_hitbox_start+y_move
         y_end = self.y_hitbox_end+y_move
 
-        for index, object in enumerate(other_objects):
+        for object in other_objects:
             if Square_Movable in type(object).__bases__ and not (type(object) in self.ignore_types):
                 other_x_start = object.x_start
                 other_x_end = object.x_end
@@ -128,7 +130,7 @@ class Square_Movable(Movable):
                 if on_same_x_axis and on_same_y_axis: # in both ranges
                     touching.append(object)
             
-            elif Circle_Movable in type(object).__bases__ and not(type(object) in self.ignore_types):
+            elif Circle_Movable in type(object).__bases__ and not(type(object) in self.ignore_types): # do this later lol
                 other_x_center = object.x_center
                 other_y_center = object.y_center
                 other_radius = object.radius
@@ -136,6 +138,9 @@ class Square_Movable(Movable):
         
         return touching
 
+    
+    def check_collision(self, tile_map, other_objects, x_move, y_move):
+        return self.check_map_collision(tile_map, x_move, y_move) or self.check_object_collision(other_objects, x_move, y_move)
 class Circle_Movable(Movable):
     def __init__(self, screen_size, x_center:float, y_center:float, radius:float ):
         super().__init__(screen_size)

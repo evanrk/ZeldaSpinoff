@@ -7,7 +7,7 @@ from engine.movables.enemy import Enemy
 SCROLLING_SPEED = 5
 OVERWORLD_COLOR = (232, 217, 116)
 DUNGEON_COLOR = (76, 91, 115)
-enemy = Enemy((800, 600), 150, 150, 15, 15, 15, 15, [Enemy])
+test_enemy = Enemy((800, 600), 0, 0, 150, 150, 15, 15, 15, 15)
 
 class ZeldaEngine:
     def __init__(self, surface, screen_size, tile_map:Map, player:Player):
@@ -18,7 +18,8 @@ class ZeldaEngine:
         self.pause = False
         self.overworld = True
 
-        self.objects = [enemy]
+        self.objects = [test_enemy]
+
 
     def run(self):
         run = True
@@ -57,7 +58,10 @@ class ZeldaEngine:
                     elif not (self.player.check_map_collision(self.tile_map, 1, 0)):
                         if not (self.player.check_object_collision(self.objects, 1, 0)):
                             self.player.move(1, 0)
-                    
+
+                for object in self.objects:
+                    if object.is_on_screen(self.tile_map.current_screen_index[0], self.tile_map.current_screen_index[1]):
+                        object.calculate_move_logic(self.tile_map, self.objects, self.player)                    
 
             # change screen
             self.render_map(self.tile_map)
