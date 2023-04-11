@@ -27,43 +27,35 @@ class ZeldaEngine:
             self.fill_background(self.overworld) # CHANGE
             if not self.pause: # runs when not paused
                 keys = pygame.key.get_pressed()
-                touch_direction, touching_objects = self.player.check_object_collision(self.objects)
+                
 
                 if keys[pygame.K_UP]:
                     if "UP" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] > 0:
                             self.animate_screen_switch("UP")
-                    elif not "UP" in (self.player.check_map_collision(self.tile_map)):
-                        # if not (self.player.check_object_collision(self.objects, 0, -1)):
-                        if not "UP" in touch_direction:
-                            self.player.move(0, -1)
+                    else:
+                        player_touching_direction, player_objects_touching = self.player.update(self.tile_map, self.objects, "UP")
                 
                 elif keys[pygame.K_DOWN]:
                     if "DOWN" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] < len(self.tile_map.screens)-1: # len is 1 greater than last index value
                             self.animate_screen_switch("DOWN")
-                    elif not "DOWN" in (self.player.check_map_collision(self.tile_map)):
-                        # if not (self.player.check_object_collision(self.objects, 0, 1)):
-                        if not "DOWN" in touch_direction:
-                            self.player.move(0, 1)
+                    else:
+                        player_touching_direction, player_objects_touching = self.player.update(self.tile_map, self.objects, "DOWN")
 
                 elif keys[pygame.K_LEFT]:    
                     if "LEFT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] > 0:
                             self.animate_screen_switch("LEFT")
-                    elif not "LEFT" in (self.player.check_map_collision(self.tile_map)):
-                        # if not (self.player.check_object_collision(self.objects, -1, 0)):
-                        if not "LEFT" in touch_direction:
-                            self.player.move(-1, 0)
+                    else:
+                        player_touching_direction, player_objects_touching = self.player.update(self.tile_map, self.objects, "LEFT")
                 
                 elif keys[pygame.K_RIGHT]:
                     if "RIGHT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] < len(self.tile_map.screens[0])-1: # len is 1 greater than last index value
                             self.animate_screen_switch("RIGHT")
-                    elif not "RIGHT" in (self.player.check_map_collision(self.tile_map)):
-                        # if not (self.player.check_object_collision(self.objects, 1, 0)):
-                        if not "RIGHT" in touch_direction:
-                            self.player.move(1, 0)
+                    else:
+                        player_touching_direction, player_objects_touching = self.player.update(self.tile_map, self.objects, "RIGHT")
 
                 for object in self.objects:
                     if object.is_on_screen(self.tile_map.current_screen_index[0], self.tile_map.current_screen_index[1]): 

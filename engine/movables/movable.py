@@ -280,7 +280,7 @@ class Square_Movable(Movable):
         map_touching_direction = self.check_map_collision(tile_map)
         object_touching_direction, objects_touching = self.check_object_collision(other_objects)
         
-        return map_touching_direction + object_touching_direction, objects_touching
+        return set(map_touching_direction + object_touching_direction), objects_touching
 
 
 class Circle_Movable(Movable):
