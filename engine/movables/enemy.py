@@ -11,26 +11,34 @@ class Enemy(Square_Movable):
         self.screen_location_x = screen_location_x
         self.screen_location_y = screen_location_y
         self.move_frames = 0
-        self.direction = None
+        self.chosen_direction = None
 
     
-    def calculate_move_logic(self, tile_map, other_objects, player):
+    def update(self, tile_map, other_objects, player):
+        touch_directions, touched_objects = self.check_collision(tile_map, other_objects)
+        touch_direction_player, _ = self.check_object_collision([player])
+
+        self.calculate_move_logic(touch_directions, touch_direction_player)
+
+
+    def calculate_move_logic(self, touch_directions, touch_direction_player):
             if self.move_frames == 0:
-                self.direction = ["UP", "DOWN", "LEFT", "RIGHT"][random.randint(0, 3)]
+                self.chosen_direction = ["UP", "DOWN", "LEFT", "RIGHT"][random.randint(0, 3)]
                 self.move_frames = COOLDOWN
             else:
-                match self.direction:
+
+                match self.chosen_direction:
                     case "UP":
-                        if not self.check_collision(tile_map, other_objects, 0, -ENEMY_MOVE_SPEED) and not self.check_object_collision([player], 0, -ENEMY_MOVE_SPEED):
+                        if not "UP" in touch_directions and not "UP" in touch_direction_player: # up
                             self.move(0, -ENEMY_MOVE_SPEED)
                     case "DOWN":
-                        if not self.check_collision(tile_map, other_objects, 0, ENEMY_MOVE_SPEED) and not self.check_object_collision([player], 0, ENEMY_MOVE_SPEED):
+                        if not "DOWN" in touch_directions and not "DOWN" in touch_direction_player: # down
                             self.move(0, ENEMY_MOVE_SPEED)
                     case "LEFT":
-                        if not self.check_collision(tile_map, other_objects, -ENEMY_MOVE_SPEED, 0) and not self.check_object_collision([player], -ENEMY_MOVE_SPEED, 0):
+                        if not "LEFT" in touch_directions and not "LEFT" in touch_direction_player: # left
                             self.move(-ENEMY_MOVE_SPEED, 0)
                     case "RIGHT":
-                        if not self.check_collision(tile_map, other_objects, ENEMY_MOVE_SPEED, 0) and not self.check_object_collision([player], ENEMY_MOVE_SPEED, 0):
+                        if not "RIGHT" in touch_directions and not "RIGHT" in touch_direction_player: # right
                             self.move(ENEMY_MOVE_SPEED, 0)
                 
                 self.move_frames -= 1
