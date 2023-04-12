@@ -15,12 +15,22 @@ class Hearts_Ui():
 
         self.update_hearts(max_hearts)
 
-    def update_hearts(self, hearts, smiley=False):
+    def update_hearts(self, num_hearts, smiley=False):
         y_offset = self.edge_buffer_y
-        for heart_num in range(hearts):
-            x_offset = self.screen_size_x - self.edge_buffer_x - heart_num*(self.heart_buffer + self.heart_size) - self.heart_size
+        
+        start=0
+
+        if num_hearts - int(num_hearts) == 0.5:
+            x_offset = self.screen_size_x - self.edge_buffer_x - self.heart_size
+            start = 1
+            draw.draw_half_heart(x_offset, y_offset, self.heart_size, self.surface, hole_color=(0, 0, 0))
+
+        for index in range(start, int(num_hearts+start)):
+            x_offset = self.screen_size_x - self.edge_buffer_x - index*(self.heart_buffer + self.heart_size) - self.heart_size
             
             draw.draw_full_heart(x_offset, y_offset, self.heart_size, self.surface)
+            # draw.draw_half_heart(x_offset, y_offset, self.heart_size, self.surface, cut_vertical=True)
+        
 
     # def update_max_hearts(hearts):
         

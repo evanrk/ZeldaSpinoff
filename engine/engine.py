@@ -78,11 +78,14 @@ class ZeldaEngine:
 
             pygame.display.update()
 
+            if self.player.current_health == 0:
+                break
 
             for event in pygame.event.get():
                 # quit!
                 if event.type == pygame.QUIT:
                     run = False
+
 
 
     def render_map(self, tile_map, offset=0, direction="x", overworld=True):
