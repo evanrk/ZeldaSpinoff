@@ -30,7 +30,9 @@ class Player(Square_Movable):
         return self.inventory[key]
     
     def update(self, tile_map, other_objects, move_direction=None):
-        touching_direction, objects_touching = self.check_collision(tile_map, other_objects)
+        touching_direction, objects_touching, types_touching = self.check_collision(tile_map, other_objects)
+
+        
 
         match move_direction:
             case "UP":
@@ -49,4 +51,4 @@ class Player(Square_Movable):
                 if not "RIGHT" in touching_direction:
                     self.move(1, 0)
 
-        return touching_direction, objects_touching
+        return touching_direction, objects_touching, types_touching

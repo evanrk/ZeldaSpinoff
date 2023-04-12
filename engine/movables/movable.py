@@ -266,21 +266,24 @@ class Square_Movable(Movable):
                         directions.append("RIGHT")
                         touching["RIGHT"].append(object)
             
-
             # elif Circle_Movable in type(object).__bases__ and not(type(object) in self.ignore_types): # do this later lol
             #     other_x_center = object.x_center
             #     other_y_center = object.y_center
             #     other_radius = object.radius
             #     close_to_x_axis = abs(x_start - other_x_center) <= other_radius or abs(x_end - other_x_center) <= other_radius
         
-        return directions, touching
+        types_touching = []
+        for object in touching:
+            types_touching.append(type(touching))
+
+        return directions, touching, set(types_touching)
 
     
     def check_collision(self, tile_map, other_objects):
         map_touching_direction = self.check_map_collision(tile_map)
-        object_touching_direction, objects_touching = self.check_object_collision(other_objects)
+        object_touching_direction, objects_touching, types_touching = self.check_object_collision(other_objects)
         
-        return set(map_touching_direction + object_touching_direction), objects_touching
+        return set(map_touching_direction + object_touching_direction), objects_touching, types_touching
 
 
 class Circle_Movable(Movable):

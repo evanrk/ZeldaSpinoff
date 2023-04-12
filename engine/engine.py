@@ -4,8 +4,7 @@ import time
 from engine.map import Map
 from engine.movables.player import Player
 from engine.movables.enemy import Enemy
-from engine.ui import Hearts_Ui
-from engine import draw
+from engine import ui
 
 
 SCROLLING_SPEED = 5
@@ -26,6 +25,7 @@ class ZeldaEngine:
 
         self.objects = [test_enemy1, test_enemy2, test_enemy3]
 
+        self.hearts_ui = ui.Hearts_Ui(self.screen_size, self.surface, max_hearts=3, heart_size=32, heart_buffer=10, edge_buffer_x=20, edge_buffer_y=20)
 
     def run(self):
         run = True
@@ -39,28 +39,28 @@ class ZeldaEngine:
                         if self.tile_map.current_screen_index[1] > 0:
                             self.animate_screen_switch("UP")
                     else:
-                        player_touching_direction, player_objects_touching = self.player.update(self.tile_map, self.objects, "UP")
+                        player_touching_direction, player_objects_touching, player_types_touching = self.player.update(self.tile_map, self.objects, "UP")
                 
                 elif keys[pygame.K_DOWN]:
                     if "DOWN" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] < len(self.tile_map.screens)-1: # len is 1 greater than last index value
                             self.animate_screen_switch("DOWN")
                     else:
-                        player_touching_direction, player_objects_touching = self.player.update(self.tile_map, self.objects, "DOWN")
+                        player_touching_direction, player_objects_touching, player_types_touching = self.player.update(self.tile_map, self.objects, "DOWN")
 
                 elif keys[pygame.K_LEFT]:    
                     if "LEFT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] > 0:
                             self.animate_screen_switch("LEFT")
                     else:
-                        player_touching_direction, player_objects_touching = self.player.update(self.tile_map, self.objects, "LEFT")
+                        player_touching_direction, player_objects_touching, player_types_touching = self.player.update(self.tile_map, self.objects, "LEFT")
                 
                 elif keys[pygame.K_RIGHT]:
                     if "RIGHT" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[0] < len(self.tile_map.screens[0])-1: # len is 1 greater than last index value
                             self.animate_screen_switch("RIGHT")
                     else:
-                        player_touching_direction, player_objects_touching = self.player.update(self.tile_map, self.objects, "RIGHT")
+                        player_touching_direction, player_objects_touching, player_types_touching = self.player.update(self.tile_map, self.objects, "RIGHT")
 
                 for object in self.objects:
                     if object.is_on_screen(self.tile_map.current_screen_index[0], self.tile_map.current_screen_index[1]): 
@@ -73,8 +73,8 @@ class ZeldaEngine:
             for object in self.objects:
                 if object.is_on_screen(self.tile_map.current_screen_index[0], self.tile_map.current_screen_index[1]): 
                     self.render_enemy(object)
-            draw.draw_full_heart(150, 150, 50, self.surface)
             
+            self.hearts_ui.update_hearts(self.player.current_health)
 
             pygame.display.update()
 
