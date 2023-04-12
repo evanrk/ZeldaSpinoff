@@ -53,6 +53,10 @@ class Player(Square_Movable):
         if Enemy in types_touching and self.invincibility_frames == 0:
             self.invincibility_frames = self.max_invincibility_frames
             self.loose_health(0.5)
+        
+        if self.invincibility_frames != 0:
+            self.invincibility_frames -= 1
+            print(self.invincibility_frames) # need animation
 
 
         return touching_direction, objects_touching, types_touching

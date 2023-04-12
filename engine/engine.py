@@ -61,6 +61,8 @@ class ZeldaEngine:
                             self.animate_screen_switch("RIGHT")
                     else:
                         player_touching_direction, player_objects_touching, player_types_touching = self.player.update(self.tile_map, self.objects, "RIGHT")
+                else:
+                    self.player.update(self.tile_map, self.objects)
 
                 for object in self.objects:
                     if object.is_on_screen(self.tile_map.current_screen_index[0], self.tile_map.current_screen_index[1]): 

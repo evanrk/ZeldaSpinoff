@@ -18,18 +18,24 @@ class Hearts_Ui():
     def update_hearts(self, num_hearts, smiley=False):
         y_offset = self.edge_buffer_y
         
-        start=0
 
+        empty_hearts = int(self.max_hearts - num_hearts)
+
+        for index in range(empty_hearts):
+            x_offset = self.screen_size_x - self.edge_buffer_x - index*(self.heart_buffer + self.heart_size) - self.heart_size
+            draw.draw_empty_heart(x_offset, y_offset, self.heart_size, self.surface)
+
+        start=empty_hearts
         if num_hearts - int(num_hearts) == 0.5:
-            x_offset = self.screen_size_x - self.edge_buffer_x - self.heart_size
-            start = 1
+            x_offset = self.screen_size_x - self.edge_buffer_x - self.heart_size - start*(self.heart_buffer + self.heart_size) 
+            start += 1
             draw.draw_half_heart(x_offset, y_offset, self.heart_size, self.surface, hole_color=(0, 0, 0))
 
-        for index in range(start, int(num_hearts+start)):
+        for index in range(start, int(num_hearts+start)): # half heart
+            # subtracts the edge buffer and heart size from screen size in the beginning to make sure offset is from the right then subtracts heart_buffer and 
+            # heart size for every other heart there is
             x_offset = self.screen_size_x - self.edge_buffer_x - index*(self.heart_buffer + self.heart_size) - self.heart_size
-            
             draw.draw_full_heart(x_offset, y_offset, self.heart_size, self.surface)
-            # draw.draw_half_heart(x_offset, y_offset, self.heart_size, self.surface, cut_vertical=True)
         
 
     # def update_max_hearts(hearts):
