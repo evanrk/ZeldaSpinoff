@@ -5,6 +5,7 @@ from engine.movables.player import Player
 from engine.movables.enemy import Enemy
 from engine.engine import ZeldaEngine
 
+
 BACKGROUND = (150, 150, 150)
 SCREEN_SIZE = (800, 600)
 SCREEN_INDEX_SIZE = (8, 6)

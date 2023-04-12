@@ -21,10 +21,10 @@ class Player(Square_Movable):
     
     def heal(self, hit_points): # adds health but cant go over max health
         """adds health"""
-        self.health += hit_points
-        if self.health > self.max_health:
-            self.health = self.max_health
-        return self.health
+        self.current_health += hit_points
+        if self.current_health > self.max_health:
+            self.current_health = self.max_health
+        return self.current_health
     
     def __getitem__(self, key):
         return self.inventory[key]

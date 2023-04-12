@@ -1,13 +1,19 @@
 import pygame
+import time
 
 from engine.map import Map
 from engine.movables.player import Player
 from engine.movables.enemy import Enemy
+from engine.ui import Hearts_Ui
+from engine import draw
+
 
 SCROLLING_SPEED = 5
 OVERWORLD_COLOR = (232, 217, 116)
 DUNGEON_COLOR = (76, 91, 115)
-test_enemy = Enemy((800, 600), 0, 0, 150, 150, 15, 15, 15, 15)
+test_enemy1 = Enemy((800, 600), 0, 0, 150, 150, 15, 15, 15, 15)
+test_enemy2 = Enemy((800, 600), 0, 0, 200, 200, 15, 15, 15, 15)
+test_enemy3 = Enemy((800, 600), 0, 0, 250, 250, 15, 15, 15, 15)
 
 class ZeldaEngine:
     def __init__(self, surface, screen_size, tile_map:Map, player:Player):
@@ -18,7 +24,7 @@ class ZeldaEngine:
         self.pause = False
         self.overworld = True
 
-        self.objects = [test_enemy]
+        self.objects = [test_enemy1, test_enemy2, test_enemy3]
 
 
     def run(self):
@@ -28,7 +34,6 @@ class ZeldaEngine:
             if not self.pause: # runs when not paused
                 keys = pygame.key.get_pressed()
                 
-
                 if keys[pygame.K_UP]:
                     if "UP" in self.player.edges_touching():
                         if self.tile_map.current_screen_index[1] > 0:
@@ -68,7 +73,11 @@ class ZeldaEngine:
             for object in self.objects:
                 if object.is_on_screen(self.tile_map.current_screen_index[0], self.tile_map.current_screen_index[1]): 
                     self.render_enemy(object)
+            draw.draw_full_heart(150, 150, 50, self.surface)
+            
+
             pygame.display.update()
+
 
             for event in pygame.event.get():
                 # quit!
@@ -92,14 +101,17 @@ class ZeldaEngine:
                 # print(f"start: ({tile.x_start}, {tile.y_start}) end: ({tile.x_end}, {tile.y_end})")
                 rectangle = pygame.Rect(tile.x_start+x_offset, tile.y_start+y_offset, tile.x_size, tile.y_size)
                 pygame.draw.rect(self.surface, tile.color, rectangle)
+
     
     def render_player(self): # changing
         player_rect = pygame.Rect(self.player.x_start, self.player.y_start, self.player.x_hitbox, self.player.y_hitbox)
         pygame.draw.rect(self.surface, (255, 0, 0), player_rect)
 
+    
     def render_enemy(self, enemy):
         enemy_rect = pygame.Rect(enemy.x_start, enemy.y_start, enemy.x_hitbox, enemy.y_hitbox)
         pygame.draw.rect(self.surface, (255, 255, 0), enemy_rect)
+    
     
     def animate_screen_switch(self, starting_direction):
         self.pause = True
