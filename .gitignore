@@ -43,3 +43,5 @@ dist
 *.so
 __pycache__
 _headers/*
+
+# mine

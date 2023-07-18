@@ -1,5 +1,5 @@
 import math
-
+from engine.models.vector import Vector2d
 class Movable:
     def __init__(self, screen_size):
         self.screen_size = screen_size
@@ -31,10 +31,10 @@ class Square_Movable(Movable):
         self.ignore_types = ignore_types
 
     
-    def move(self, x:float, y:float):
+    def move(self, move_vec:Vector2d):
         """moves the object by changing the values"""
-        self.x_start += x
-        self.y_start += y
+        self.x_start += move_vec.x
+        self.y_start += move_vec.y
         
         self.x_end = self.x_start + self.x_hitbox
         self.y_end = self.y_start + self.y_hitbox

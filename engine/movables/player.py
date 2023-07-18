@@ -1,3 +1,4 @@
+from engine.models.vector import Vector2d
 from engine.movables.movable import Square_Movable
 from engine.movables.enemy import Enemy
 class Player(Square_Movable):
@@ -36,19 +37,23 @@ class Player(Square_Movable):
         match move_direction:
             case "UP":
                 if not "UP" in touching_direction:
-                    self.move(0, -1)
+                    self.move(Vector2d(0, -1))
+                    # self.move(0, -1)
             
             case "DOWN":
                 if not "DOWN" in touching_direction:
-                    self.move(0, 1)
+                    self.move(Vector2d(0, 1))
+                    # self.move(0, 1)
             
             case "LEFT":
                 if not "LEFT" in touching_direction:
-                    self.move(-1, 0)
+                    self.move(Vector2d(-1, 0))
+                    # self.move(-1, 0)
             
             case "RIGHT":
                 if not "RIGHT" in touching_direction:
-                    self.move(1, 0)
+                    self.move(Vector2d(1, 0))
+                    # self.move(1, 0)
 
         if Enemy in types_touching and self.invincibility_frames == 0:
             self.invincibility_frames = self.max_invincibility_frames

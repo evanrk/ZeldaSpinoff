@@ -1,4 +1,3 @@
-import math
 import engine.tile as tile
 
 class Map:

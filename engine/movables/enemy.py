@@ -1,5 +1,6 @@
 import random
 
+from engine.models.vector import Vector2d
 from engine.movables.movable import Square_Movable
 
 COOLDOWN = 120
@@ -30,16 +31,16 @@ class Enemy(Square_Movable):
                 match self.chosen_direction:
                     case "UP":
                         if not "UP" in touch_directions and not "UP" in touch_direction_player: # up
-                            self.move(0, -ENEMY_MOVE_SPEED)
+                            self.move(Vector2d(0, -ENEMY_MOVE_SPEED))
                     case "DOWN":
                         if not "DOWN" in touch_directions and not "DOWN" in touch_direction_player: # down
-                            self.move(0, ENEMY_MOVE_SPEED)
+                            self.move(Vector2d(0, ENEMY_MOVE_SPEED))
                     case "LEFT":
                         if not "LEFT" in touch_directions and not "LEFT" in touch_direction_player: # left
-                            self.move(-ENEMY_MOVE_SPEED, 0)
+                            self.move(Vector2d(-ENEMY_MOVE_SPEED, 0))
                     case "RIGHT":
                         if not "RIGHT" in touch_directions and not "RIGHT" in touch_direction_player: # right
-                            self.move(ENEMY_MOVE_SPEED, 0)
+                            self.move(Vector2d(ENEMY_MOVE_SPEED, 0))
                 
                 self.move_frames -= 1
 
