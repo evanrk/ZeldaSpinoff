@@ -1,5 +1,6 @@
 import math
 
+
 class Vector2d:
     def __init__(self, x, y):
         """VECTOR MATCHES Y, X FORMAT"""

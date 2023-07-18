@@ -7,9 +7,12 @@ from engine.movables.enemy import Enemy
 from engine import ui
 from engine.models.vector import Vector2d
 
+# constants:
 SCROLLING_SPEED = 5
 OVERWORLD_COLOR = (232, 217, 116)
 DUNGEON_COLOR = (76, 91, 115)
+
+# test enemies
 test_enemy1 = Enemy((800, 600), 0, 0, 150, 150, 15, 15, 15, 15)
 test_enemy2 = Enemy((800, 600), 0, 0, 200, 200, 15, 15, 15, 15)
 test_enemy3 = Enemy((800, 600), 0, 0, 250, 250, 15, 15, 15, 15)
@@ -24,6 +27,7 @@ class ZeldaEngine:
         self.overworld = True
 
         self.objects = [test_enemy1, test_enemy2, test_enemy3]
+        # self.objects = []
 
         self.current_objects = []
 

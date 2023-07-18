@@ -2,7 +2,6 @@ import pygame
 
 from PIL import Image
 
-
 boring_heart_image = Image.open("engine/sprites/full_heart_img.png")
 boring_heart_image_data = boring_heart_image.getdata()
 

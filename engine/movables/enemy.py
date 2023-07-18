@@ -3,8 +3,10 @@ import random
 from engine.models.vector import Vector2d
 from engine.movables.movable import Square_Movable
 
+# constants
 COOLDOWN = 120
 ENEMY_MOVE_SPEED = 0.25
+
 
 class Enemy(Square_Movable):
     def __init__(self, screen_size, screen_location_x, screen_location_y, x_start: float, y_start: float, x_hitbox: float, y_hitbox: float, x_size: float, y_size: float, ignore_types=[]):
