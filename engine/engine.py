@@ -5,7 +5,7 @@ from engine.map import Map
 from engine.movables.player import Player
 from engine.movables.enemy import Enemy
 from engine import ui
-
+from engine.models.vector import Vector2d
 
 SCROLLING_SPEED = 5
 OVERWORLD_COLOR = (232, 217, 116)
@@ -168,9 +168,11 @@ class ZeldaEngine:
 
             # print(offset + self.player.x_size)            
             if direction == "x" and negative*offset > self.player.x_size: # if the offset is greater then the player size it will move the player, this prevents the player from going off the screen
-                self.player.move(where_u_r_going, 0)
+                self.player.move(Vector2d(where_u_r_going, 0))
+                # self.player.move(where_u_r_going, 0)
             elif direction == "y" and negative*offset > self.player.y_size: # same here but for y-axis
-                self.player.move(0, where_u_r_going) # position is negative on y-axis
+                self.player.move(Vector2d(0, where_u_r_going)) # position is negative on y-axis
+                # self.player.move(0, where_u_r_going) # position is negative on y-axis
             
             self.render_player()
 
