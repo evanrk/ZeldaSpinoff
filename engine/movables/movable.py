@@ -226,8 +226,9 @@ class Square_Movable(Movable):
     def check_object_collision(self, other_objects):
         """finds all objects touching this one returns a list"""
         directions = []
-        touching = {"UP": [], "DOWN": [], "LEFT": [], "RIGHT": []}
-        types_touching = []
+        directions_touching = {"UP": [], "DOWN": [], "LEFT": [], "RIGHT": []}
+        types = []
+        types_touching = {}
         
         x_start = self.x_hitbox_start
         x_end = self.x_hitbox_end
@@ -250,26 +251,42 @@ class Square_Movable(Movable):
                 if on_same_x_axis and (y_start <= other_y_end and y_start >= other_y_start): # up?
                     if x_start - other_x_end != 0 and x_end - other_x_start != 0:
                         directions.append("UP")
-                        touching["UP"].append(object)
-                        types_touching.append(type(object))
+                        directions_touching["UP"].append(object)
+                        types.append(type(object))
+                        if types_touching.get(type(object)):
+                            types_touching[type(object)].append(object)
+                        else:
+                            types_touching[type(object)] = [object]
                 
                 if on_same_x_axis and (y_end >= other_y_start and y_start <= other_y_start): # down? idk lmao
                     if x_start - other_x_end != 0 and x_end - other_x_start != 0:
                         directions.append("DOWN")
-                        touching["DOWN"].append(object)
-                        types_touching.append(type(object))
+                        directions_touching["DOWN"].append(object)
+                        types.append(type(object))
+                        if types_touching.get(type(object)):
+                            types_touching[type(object)].append(object)
+                        else:
+                            types_touching[type(object)] = [object]
 
                 if on_same_y_axis and (x_start <= other_x_end and x_start >= other_x_start): # left?
                     if y_start - other_y_end != 0 and y_end - other_y_start != 0:
                         directions.append("LEFT")
-                        touching["LEFT"].append(object)
-                        types_touching.append(type(object))
+                        directions_touching["LEFT"].append(object)
+                        types.append(type(object))
+                        if types_touching.get(type(object)):
+                            types_touching[type(object)].append(object)
+                        else:
+                            types_touching[type(object)] = [object]
 
                 if on_same_y_axis and (x_end >= other_x_start and x_start <= other_x_start): # right?
                     if y_start - other_y_end != 0 and y_end - other_y_start != 0:
                         directions.append("RIGHT")
-                        touching["RIGHT"].append(object)
-                        types_touching.append(type(object))
+                        directions_touching["RIGHT"].append(object)
+                        types.append(type(object))
+                        if types_touching.get(type(object)):
+                            types_touching[type(object)].append(object)
+                        else:
+                            types_touching[type(object)] = [object]
             
             # elif Circle_Movable in type(object).__bases__ and not(type(object) in self.ignore_types): # do this later lol
             #     other_x_center = object.x_center
@@ -277,14 +294,71 @@ class Square_Movable(Movable):
             #     other_radius = object.radius
             #     close_to_x_axis = abs(x_start - other_x_center) <= other_radius or abs(x_end - other_x_center) <= other_radius
 
-        return directions, touching, set(types_touching)
+        return directions, directions_touching, set(types), types_touching
+
+
+    # def check_object_collision(self, other_objects):
+    #     """finds all objects touching this one returns a list"""
+    #     directions = []
+    #     touching = {"UP": [], "DOWN": [], "LEFT": [], "RIGHT": []}
+    #     types_touching = 
+        
+    #     x_start = self.x_hitbox_start
+    #     x_end = self.x_hitbox_end
+    #     y_start = self.y_hitbox_start
+    #     y_end = self.y_hitbox_end
+
+        
+    #     for object in other_objects:
+    #         if Square_Movable in type(object).__bases__ and not (type(object) in self.ignore_types):
+    #             other_x_start = object.x_start
+    #             other_x_end = object.x_end
+    #             other_y_start = object.y_start
+    #             other_y_end = object.y_end
+
+
+    #             on_same_y_axis = (y_start <= other_y_end and y_start >= other_y_start) or (y_end >= other_y_start and y_start <= other_y_start) # in the y range
+    #             on_same_x_axis = (x_start <= other_x_end and x_start >= other_x_start) or (x_end >= other_x_start and x_start <= other_x_start) # in the x range
+
+
+    #             if on_same_x_axis and (y_start <= other_y_end and y_start >= other_y_start): # up?
+    #                 if x_start - other_x_end != 0 and x_end - other_x_start != 0:
+    #                     directions.append("UP")
+    #                     touching["UP"].append(object)
+    #                     types_touching.append(type(object))
+                
+    #             if on_same_x_axis and (y_end >= other_y_start and y_start <= other_y_start): # down? idk lmao
+    #                 if x_start - other_x_end != 0 and x_end - other_x_start != 0:
+    #                     directions.append("DOWN")
+    #                     touching["DOWN"].append(object)
+    #                     types_touching.append(type(object))
+
+    #             if on_same_y_axis and (x_start <= other_x_end and x_start >= other_x_start): # left?
+    #                 if y_start - other_y_end != 0 and y_end - other_y_start != 0:
+    #                     directions.append("LEFT")
+    #                     touching["LEFT"].append(object)
+    #                     types_touching.append(type(object))
+
+    #             if on_same_y_axis and (x_end >= other_x_start and x_start <= other_x_start): # right?
+    #                 if y_start - other_y_end != 0 and y_end - other_y_start != 0:
+    #                     directions.append("RIGHT")
+    #                     touching["RIGHT"].append(object)
+    #                     types_touching.append(type(object))
+            
+    #         # elif Circle_Movable in type(object).__bases__ and not(type(object) in self.ignore_types): # do this later lol
+    #         #     other_x_center = object.x_center
+    #         #     other_y_center = object.y_center
+    #         #     other_radius = object.radius
+    #         #     close_to_x_axis = abs(x_start - other_x_center) <= other_radius or abs(x_end - other_x_center) <= other_radius
+
+    #     return directions, touching, set(types_touching)
 
     
     def check_collision(self, tile_map, other_objects):
         map_touching_direction = self.check_map_collision(tile_map)
-        object_touching_direction, objects_touching, types_touching = self.check_object_collision(other_objects)
+        object_touching_direction, objects_touching, types_touching, touching_by_type = self.check_object_collision(other_objects)
         
-        return set(map_touching_direction + object_touching_direction), objects_touching, types_touching
+        return set(map_touching_direction + object_touching_direction), objects_touching, types_touching, touching_by_type
 
 
 class Circle_Movable(Movable):

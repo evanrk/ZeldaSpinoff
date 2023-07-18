@@ -18,8 +18,8 @@ class Enemy(Square_Movable):
 
     
     def update(self, tile_map, other_objects, player):
-        touch_directions, touch_objects, types_touching = self.check_collision(tile_map, other_objects)
-        touch_direction_player, _, _ = self.check_object_collision([player])
+        touch_directions, touch_objects, touch_types, touching_by_types = self.check_collision(tile_map, other_objects)
+        touch_direction_player, _, _, _ = self.check_object_collision([player])
 
         self.calculate_move_logic(touch_directions, touch_direction_player)
 
